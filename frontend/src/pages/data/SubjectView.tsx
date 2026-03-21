@@ -838,9 +838,11 @@ const SubjectView = observer((props: SubjectViewProps) => {
                 }}>
             </textarea>
             <div id="citeHelp" className="form-text">We are replacing citations for individual subjects with dataset citations. Please add a citation for the full dataset and remove the subject citations.</div>
-            <button disabled={props.readonly} className="btn btn-warning" onClick={async (e) => {
-                subjectJson.setAttribute("citation", "");
-            }}>Remove Citation</button>
+            {!props.readonly && (
+                <button disabled={props.readonly} className="btn btn-warning" onClick={async (e) => {
+                    subjectJson.setAttribute("citation", "");
+                }}>Remove Citation</button>
+            )}
         </div>)
     };
 
@@ -879,7 +881,7 @@ const SubjectView = observer((props: SubjectViewProps) => {
                     <th scope="col" style={{ width: '100px', maxWidth: '30%' }}>Name</th>
                     <th scope="col">Marker and Forces Data</th>
                     <th scope="col">Tags</th>
-                    <th scope="col" style={{ width: '100px' }}>Delete?</th>
+                    {!props.readonly && <th scope="col" style={{ width: '100px' }}>Delete?</th>}
                 </tr>
             </thead>
             <tbody>
@@ -931,13 +933,13 @@ const SubjectView = observer((props: SubjectViewProps) => {
                                 }}
                             />
                         </td>
-                        <td><button className="btn btn-dark" onClick={(e) => {
+                        {!props.readonly && <td><button className="btn btn-dark" onClick={(e) => {
                             e.preventDefault();
                             e.stopPropagation();
                             if (window.confirm("Are you sure you want to delete trial \"" + trial.name + "\"?")) {
                                 subjectState.deleteTrial(trial);
                             }
-                        }}>Delete</button></td>
+                        }}>Delete</button></td>}
                     </tr>;
                 })}
             </tbody>
