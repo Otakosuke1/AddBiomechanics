@@ -1,6 +1,8 @@
-# AddBiomechanics CLI
+# AddBiomechanics CLI (Local-only)
 
-This directory contains the Python command line interface for AddBiomechanics.
+This directory contains a local-only Python command line interface for AddBiomechanics.
+
+Cloud-backed features such as AWS access, remote uploads/downloads, and account authentication are not supported on this branch.
 
 ## Install
 
@@ -24,85 +26,46 @@ Show the available commands:
 addb --help
 ```
 
-Use the development deployment (default):
+## Local commands
 
-```bash
-addb -d dev ls
-```
-
-Use the production deployment:
-
-```bash
-addb -d prod ls
-```
-
-## Authentication
-
-Most remote commands authenticate against AddBiomechanics and will prompt for your username and password if they are not provided on the command line.
+This branch is focused on commands that operate on local files.
 
 Examples:
 
 ```bash
-addb -u you@example.com -p 'your-password' ls
-addb -u you@example.com upload ./my_dataset
+addb post-process <source_data_folder> <destination_data_folder>
+addb export-csv <source_bin_file> <destination_csv_file>
+addb stats <path>
+addb plot <path>
+addb compare <file_a> <file_b>
 ```
 
-Credentials are cached in `~/.addb_login.json` for reuse by later commands.
-
-## Common commands
-
-### Upload a dataset
-
-```bash
-addb upload ./path/to/dataset
-```
-
-Skip the confirmation prompt:
-
-```bash
-addb upload ./path/to/dataset --yes
-```
-
-Upload to the private workspace:
-
-```bash
-addb upload ./path/to/dataset --private
-```
-
-### Download processed data
-
-Download subjects matching a regex:
-
-```bash
-addb download --pattern 'standardized/rajagopal_no_arms/.*'
-```
-
-Only include reviewed subjects:
-
-```bash
-addb download --pattern 'standardized/rajagopal_no_arms/.*' --reviewed-only
-```
-
-### Download files directly
-
-```bash
-addb download-files --prefix standardized/rajagopal_no_arms --pattern '.*_dynamics_trials_only\.b3d'
-```
-
-### Generate dataset credits
-
-```bash
-addb generate-credits --prefix standardized/
-```
-
-## Local-only utilities
-
-Some commands operate on local files and do not require remote authentication, including utilities such as:
+Common local-only utilities include:
 
 - `post-process`
 - `export-csv`
 - `stats`
 - `plot`
 - `compare`
+- `debug`
+- `view`
+- `view-energy`
+- `transfer-markerset`
+- `describe-dataset`
+- `transfer-reviews`
+- `create-b3d`
+- `clean-up`
 
-Run `addb --help` to see the full command list and per-command options.
+## Removed cloud features
+
+The following cloud-oriented capabilities are intentionally disabled or removed from this local-only branch:
+
+- login/authentication
+- AWS/Cognito/S3 access
+- remote dataset listing
+- remote uploads
+- remote downloads
+- remote analytics
+- remote credit generation
+
+If you need remote AddBiomechanics service integration, use an upstream cloud-enabled branch instead.
