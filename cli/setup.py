@@ -5,7 +5,7 @@ setup(
     version='0.1',
     author='Keenon Werling',
     author_email='keenon@stanford.edu',
-    description='A command line interface to conveniently upload bulk data to AddBiomechanics for parallel processing on the cluster',
+    description='A local-only command line interface for processing biomechanics data',
     packages=find_packages(),
     entry_points={
         'console_scripts': [
@@ -16,7 +16,5 @@ setup(
     package_data={
         'addbiomechanics': ['data/**'],
     },
-    install_requires=[
-        'boto3'
-    ]
+    install_requires=[]
 )
