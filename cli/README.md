@@ -1,60 +1,108 @@
-# Welcome to the AddBiomechanics Command Line Interface
+# AddBiomechanics CLI
 
-This tool allows you to conveniently upload large datasets to be bulk processed on SLURM by AddBiomechanics, as well as do bulk downloads and collect statistics about datasets.
+This directory contains the Python command line interface for AddBiomechanics.
 
-To install, just run (from the root of this repository):
+## Install
 
-`pip3 install ./cli`
+From the repository root:
 
-## Bulk Uploading
+```bash
+pip install ./cli
+```
 
-Then you can use the new `addb` tool on the command line, like so:
+To install in editable mode while developing:
 
-`addb upload <path_to_your_folder>`
+```bash
+pip install -e ./cli
+```
 
-## Creating Datasets
+## Basic usage
 
-You can bulk download processed datasets from AddBiomechanics using the `download` command:
+Show the available commands:
 
-`addb download <regex_to_match>`
+```bash
+addb --help
+```
 
-AddBiomechanics maintains a list of standard models, and will reprocess all data into the standard models automatically.
-To download all the binary data from the `rajagopal_no_arms` standard model, you can run:
+Use the development deployment (default):
 
-`addb -d dev download "standardized/rajagopal_no_arms/.*\.bin$"`
+```bash
+addb -d dev ls
+```
 
-to get the data off the DEV servers, and
+Use the production deployment:
 
-`addb -d prod download "standardized/rajagopal_no_arms/.*\.bin$"`
+```bash
+addb -d prod ls
+```
 
-to get the data off the PROD servers.
+## Authentication
 
-Then, you'll likely want to downsample and/or lowpass filter the newly downloaded data (AddBiomechanics doesn't do any 
-filtering on the server side, so we don't accidentally destroy useful high-frequency content).
+Most remote commands authenticate against AddBiomechanics and will prompt for your username and password if they are not provided on the command line.
 
-To resample a downloaded folder at 50Hz sample rate, with a 20Hz lowpass filter, run:
+Examples:
 
-`addb post-process <source_data_folder> <destination_data_folder> --sample-rate 50 --lowpass-hz 20`
+```bash
+addb -u you@example.com -p 'your-password' ls
+addb -u you@example.com upload ./my_dataset
+```
 
-## Exporting Data to CSV
+Credentials are cached in `~/.addb_login.json` for reuse by later commands.
 
-To export a subject to a CSV, run:
+## Common commands
 
-`addb export-csv <source_bin_file> <destination_csv_file> --column pos_<dof> vel_<dof> wrk_<dof>`
+### Upload a dataset
 
-You can specify as many columns as you like, and the CSV will be created with the specified columns. The naming 
-convention for the columns is they are the prefix, followed by an underscore, followed by the degree of freedom. The 
-currently available prefixes are:
-- `pos`: position
-- `vel`: velocity
-- `acc`: acceleration
-- `tau`: torque
-- `pwr`: power = torque * velocity
-- `wrk`: work = time integral of `pwr`
+```bash
+addb upload ./path/to/dataset
+```
 
-## Misc Utilities
+Skip the confirmation prompt:
 
-There are built in commands to translate markersets between OpenSim models, run analytics on AddBiomechanics uploads, 
-list files, etc. For more info and other commands:
+```bash
+addb upload ./path/to/dataset --yes
+```
 
-`addb --help`
+Upload to the private workspace:
+
+```bash
+addb upload ./path/to/dataset --private
+```
+
+### Download processed data
+
+Download subjects matching a regex:
+
+```bash
+addb download --pattern 'standardized/rajagopal_no_arms/.*'
+```
+
+Only include reviewed subjects:
+
+```bash
+addb download --pattern 'standardized/rajagopal_no_arms/.*' --reviewed-only
+```
+
+### Download files directly
+
+```bash
+addb download-files --prefix standardized/rajagopal_no_arms --pattern '.*_dynamics_trials_only\.b3d'
+```
+
+### Generate dataset credits
+
+```bash
+addb generate-credits --prefix standardized/
+```
+
+## Local-only utilities
+
+Some commands operate on local files and do not require remote authentication, including utilities such as:
+
+- `post-process`
+- `export-csv`
+- `stats`
+- `plot`
+- `compare`
+
+Run `addb --help` to see the full command list and per-command options.
