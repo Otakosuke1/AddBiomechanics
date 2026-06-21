@@ -1,6 +1,5 @@
 from addbiomechanics.commands.abstract_command import AbstractCommand
 import argparse
-from addbiomechanics.auth import AuthContext
 import os
 
 def get_absolute_path(user_input):

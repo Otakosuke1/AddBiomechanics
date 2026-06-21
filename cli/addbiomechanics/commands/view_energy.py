@@ -1,6 +1,5 @@
 from addbiomechanics.commands.abstract_command import AbstractCommand
 import argparse
-from addbiomechanics.auth import AuthContext
 import os
 from datetime import datetime
 from addbiomechanics.s3_structure import S3Node, retrieve_s3_structure, sizeof_fmt

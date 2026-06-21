@@ -1,6 +1,7 @@
 # AddBiomechanics CLI
 
-This directory contains the Python command line interface for AddBiomechanics.
+This branch provides a **local-only** CLI workflow for AddBiomechanics utilities.
+Cloud account features are intentionally disabled here.
 
 ## Install
 
@@ -24,85 +25,27 @@ Show the available commands:
 addb --help
 ```
 
-Use the development deployment (default):
+## Local-only behavior
 
-```bash
-addb -d dev ls
-```
+The local CLI does **not** include:
+- AWS/Cognito login
+- deployment selection (`-d`)
+- cached credentials (`~/.addb_login.json`)
+- cloud commands like upload/download/list/analytics
 
-Use the production deployment:
-
-```bash
-addb -d prod ls
-```
-
-## Authentication
-
-Most remote commands authenticate against AddBiomechanics and will prompt for your username and password if they are not provided on the command line.
-
-Examples:
-
-```bash
-addb -u you@example.com -p 'your-password' ls
-addb -u you@example.com upload ./my_dataset
-```
-
-Credentials are cached in `~/.addb_login.json` for reuse by later commands.
-
-## Common commands
-
-### Upload a dataset
-
-```bash
-addb upload ./path/to/dataset
-```
-
-Skip the confirmation prompt:
-
-```bash
-addb upload ./path/to/dataset --yes
-```
-
-Upload to the private workspace:
-
-```bash
-addb upload ./path/to/dataset --private
-```
-
-### Download processed data
-
-Download subjects matching a regex:
-
-```bash
-addb download --pattern 'standardized/rajagopal_no_arms/.*'
-```
-
-Only include reviewed subjects:
-
-```bash
-addb download --pattern 'standardized/rajagopal_no_arms/.*' --reviewed-only
-```
-
-### Download files directly
-
-```bash
-addb download-files --prefix standardized/rajagopal_no_arms --pattern '.*_dynamics_trials_only\.b3d'
-```
-
-### Generate dataset credits
-
-```bash
-addb generate-credits --prefix standardized/
-```
-
-## Local-only utilities
-
-Some commands operate on local files and do not require remote authentication, including utilities such as:
+It only exposes local file-processing commands, including:
 
 - `post-process`
 - `export-csv`
 - `stats`
 - `plot`
 - `compare`
+- `view`
+- `view-energy`
+- `transfer-markerset`
+- `transfer-reviews`
+- `create-b3d`
+- `clean-up`
+- `describe-dataset`
 
-Run `addb --help` to see the full command list and per-command options.
+Run `addb --help` to see the available local commands and per-command options.

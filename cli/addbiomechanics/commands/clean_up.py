@@ -2,13 +2,11 @@ import random
 
 from addbiomechanics.commands.abstract_command import AbstractCommand
 import argparse
-from addbiomechanics.auth import AuthContext
 import os
 import tempfile
 from typing import List, Dict, Tuple
 import itertools
 import json
-from addbiomechanics.bad_frames_detector.thresholds import ThresholdsDetector
 
 
 class CleanUpCommand(AbstractCommand):
@@ -37,6 +35,11 @@ class CleanUpCommand(AbstractCommand):
             import numpy as np
         except ImportError:
             print("The required library 'numpy' is not installed. Please install it and try this command again.")
+            return True
+        try:
+            from addbiomechanics.bad_frames_detector.thresholds import ThresholdsDetector
+        except ImportError:
+            print("The required library 'nimblephysics' is not installed. Please install it and try this command again.")
             return True
 
         input_path_raw: str = os.path.abspath(args.input_path)

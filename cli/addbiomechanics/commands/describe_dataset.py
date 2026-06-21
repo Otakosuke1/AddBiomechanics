@@ -1,7 +1,5 @@
-import scipy.signal
 from addbiomechanics.commands.abstract_command import AbstractCommand
 import argparse
-from addbiomechanics.auth import AuthContext
 import os
 import tempfile
 from typing import List, Dict, Tuple
@@ -19,6 +17,7 @@ class DescribeDatasetCommand(AbstractCommand):
     def run_local(self, args: argparse.Namespace) -> bool:
         if args.command != 'describe-dataset':
             return False
+        import scipy.signal
 
         try:
             import nimblephysics as nimble

@@ -1,6 +1,8 @@
-from typing import List, Dict, Tuple
+from typing import List, Dict, Tuple, TYPE_CHECKING
 import datetime
-from addbiomechanics.auth import AuthContext
+
+if TYPE_CHECKING:
+    from addbiomechanics.auth import AuthContext
 
 def sizeof_fmt(num: int, suffix="B"):
     for unit in ["", "Ki", "Mi", "Gi", "Ti", "Pi", "Ei", "Zi"]:
@@ -201,7 +203,7 @@ class S3Node:
                 child.debug(tab_level + 1, include_trials=include_trials, include_subjects=include_subjects,
                             grf_only=grf_only)
 
-def retrieve_s3_structure(ctx: AuthContext, s3_prefix: str = 'protected/') -> 'S3Node':
+def retrieve_s3_structure(ctx: 'AuthContext', s3_prefix: str = 'protected/') -> 'S3Node':
     s3 = ctx.aws_session.client('s3')
     # Call list_objects_v2() with the continuation token
     response = s3.list_objects_v2(
@@ -228,4 +230,3 @@ def retrieve_s3_structure(ctx: AuthContext, s3_prefix: str = 'protected/') -> 'S
             break
 
     return root
-
