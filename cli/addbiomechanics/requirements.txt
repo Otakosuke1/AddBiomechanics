@@ -1,2 +1,1 @@
-boto3
-requests
+# Remote cloud dependencies intentionally removed in cli-local-version.
